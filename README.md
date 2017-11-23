@@ -54,3 +54,11 @@ Author :
 ![](https://github.com/deenrookie/fff-sqli/blob/master/images/2017-11-23-185739_791x552_scrot.png)
 ![](https://github.com/deenrookie/fff-sqli/blob/master/images/2017-11-23-190223_792x546_scrot.png)
 
+## TODO
+
+- [ ] 添加bypass脚本
+- [ ] 启用多线程进行注入
+- [ ] 添加注入点fuzz功能
+- [ ] 代码优化以及某些细节的异常处理
+
+
