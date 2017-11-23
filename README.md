@@ -27,6 +27,14 @@ CTF的盲注总是要重新修改脚本，不胜其烦。于是写了这个工�
 keywords: Hello
 
 Usage: 
+```
+Usage : 
+        python fffsqli.py [URL] [DATA] [KEYWORDS] ...
+Example : 
+        python fffsqi.py -u "http://127.0.0.1/?id=1" --keywords "key" --tables 1
+Author : 
+        Deen <1123537671@qq.com>
+```
 
 获取表名：
 
