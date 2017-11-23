@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-__author__ = 'Deen'
+__author__ = 'Deen <1123537671@qq.com>'
 
 import sys, requests, re, argparse
 from binascii import b2a_hex as hex
